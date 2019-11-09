@@ -2,6 +2,7 @@
   <dictionary name="yanshuai">
     <words>
       <w>pyglet</w>
+      <w>pyrender</w>
       <w>trimesh</w>
     </words>
   </dictionary>
