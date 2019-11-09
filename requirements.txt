@@ -1,4 +1,2 @@
-trimesh==3.4.0
 numpy==1.16.4
-pyglet==1.4.0b1
-pyrender==0.1.32
+matplotlib==3.0.3
