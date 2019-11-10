@@ -16,4 +16,7 @@ uv = disk_harmonic_map(F, V)
 
 # plot_mesh(F, uv)
 
+vr = compute_vertex_ring(F, V, ordered=True)
+
+
 power_diagram(F, uv)
