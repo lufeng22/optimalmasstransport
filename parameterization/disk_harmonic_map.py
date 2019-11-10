@@ -36,3 +36,4 @@ def disk_harmonic_map(face, vertex):
     rhs = -A[inflag,:][:,bd] @ uvbd
     uvin = spsolve(Ain,rhs)
     uv[inflag,:] = uvin
+    return uv
