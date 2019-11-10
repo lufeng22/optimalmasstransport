@@ -14,11 +14,12 @@ def compute_bd(face):
     # first compute the adjacent matrix
     am, amd = compute_adjacency_matrix(face)
     md = am - (amd > 0) * 2
-    eij = np.argwhere(md == -1) # boundary eij
-
-    bd = np.zeros(eij.shape[0], dtype=int)
+    I = np.argwhere(md.transpose() == -1)[:,1] # boundary eij
+    Ii = np.argsort(I)
+    nbd = I.shape[0]
+    bd = np.zeros(nbd, dtype=int)
     k = 0
-    for i in range(0, eij.shape[0]):
-        bd[i] = eij[k,1]
-        k = np.argwhere(eij[:,0]==bd[i])
+    for i in range(0, nbd):
+        bd[i] = I[k]
+        k = Ii[k]
     return bd.astype(int)

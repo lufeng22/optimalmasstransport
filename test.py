@@ -12,6 +12,9 @@ V = mesh.points
 
 # compute the boundary vertices
 bd = compute_bd(F)
+
+
+
 # plot_path(F, V, bd)
 
 from algebra.compute_edge import *
@@ -32,6 +35,8 @@ def cot2(pi, pj, pk):
 face = F
 vertex = V
 edge, eif = compute_edge(face)
+
+
 
 ne = edge.shape[0]
 ew = np.zeros((ne, 1))

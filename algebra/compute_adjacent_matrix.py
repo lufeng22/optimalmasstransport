@@ -10,8 +10,9 @@ import numpy as np
 
 def compute_adjacency_matrix(face):
     nf = face.shape[0]
-    I = np.array([face[:,0],face[:,1], face[:,2]]).reshape((nf*3,1),order='F')
-    J = np.array([face[:,1],face[:,2], face[:,0]]).reshape((nf*3,1),order='F')
+    I = face.reshape((nf*3,1))
+    facecopy = np.array([face[:,1],face[:,2], face[:,0]]).transpose()
+    J = facecopy.reshape((nf*3,1))
     V = np.array([range(0,nf),range(0,nf),range(0,nf)]).reshape((nf*3,1),order='F')
     amd = sparse.coo_matrix((V.flatten(), (I.flatten(), J.flatten())))
     am = amd.copy().tocsr()
