@@ -3,6 +3,7 @@ from graphics.plot_mesh import plot_mesh
 from graphics.plot_path import plot_path
 from algebra.compute_bd import compute_bd
 from algebra.compute_adjacent_matrix import *
+import numpy as np
 # Load mesh and show the mesh
 mesh = meshio.read('data/bunny.obj')
 F = mesh.cells['triangle']

@@ -17,5 +17,5 @@ def compute_adjacency_matrix(face):
     am = amd.copy().tocsr()
     am.data.fill(1)
     am = am + am.transpose()
-    return am,amd
+    return am,amd.tocsr()
 
