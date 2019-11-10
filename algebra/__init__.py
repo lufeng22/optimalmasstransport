@@ -1,1 +1,4 @@
-__all__ = ["compute_adjacent_matrix", "compute_bd", "compute_edge", "laplacian_beltrami"]
+from algebra.compute_adjacent_matrix import *
+from algebra.compute_bd import *
+from algebra.compute_edge import *
+from algebra.laplacian_beltrami import *

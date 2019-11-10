@@ -4,3 +4,5 @@
 
 [edge,eif] = compute_edge(F)
 A = laplace_beltrami(F,V)
+
+disk_harmonic_map(F,V)
