@@ -19,4 +19,5 @@ def compute_edge(face):
         eif[i, 0] = amd[edge[i, 0], edge[i, 1]]
         eif[i, 1] = amd[edge[i, 1], edge[i, 0]]
 
-    return edge, eif-1
+    eif = eif-1
+    return edge.astype('int'), eif.astype('int')
