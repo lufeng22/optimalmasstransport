@@ -27,4 +27,5 @@ def plot_mesh(F=None, V=None):
         ax = Axes3D(fig)
         ax.plot_trisurf(V[:,0], V[:,1], V[:,2], triangles=F, cmap=plt.cm.Spectral)
         # Draw now
+        ax.set_aspect('equal')
         plt.draw()

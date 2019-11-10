@@ -4,19 +4,8 @@
 import numpy as np
 from algebra.compute_adjacent_matrix import compute_adjacency_matrix
 import scipy
-def xor(a_, b_):
-    c = scipy.sparse.dok_matrix(a_)
-    a = scipy.sparse.dok_matrix(a_)
-    b = scipy.sparse.dok_matrix(b_)
-    for i, j, v in zip(a.nonzeros):
-        c[i,j] = v ^ b[i,j]
-
-    for i, j, v in zip(b.row, b.col, b.data):
-        c[i,j] = v ^ a[i,j]
-
-    return c
-
-
+def xor(a, b):
+    return np.logical_xor(a.todense(), b.todense())
 
 
 def compute_edge(face):
@@ -35,4 +24,4 @@ def compute_edge(face):
     V2 = np.squeeze(np.asarray(V2))
 
     eif = np.array([V[ind], V2[ind]])
-    return edge, eif
+    return edge.transpose(), eif.transpose()
