@@ -9,10 +9,10 @@ from calculate_face_normal import *
 from algebra import *
 
 
-def face_dual(p):
-    a = p[0, 1] * (p[1, 1] - p[1, 1]) + p[1, 1] * (p[1, 1] - p[0, 1]) + p[1, 1] * (p[0, 1] - p[1, 1])
-    b = p[0, 1] * (p[1, 0] - p[1, 0]) + p[1, 1] * (p[1, 0] - p[0, 0]) + p[1, 1] * (p[0, 0] - p[1, 0])
-    c = p[0, 0] * (p[1, 1] - p[1, 1]) + p[1, 0] * (p[1, 1] - p[0, 1]) + p[1, 0] * (p[0, 1] - p[1, 1])
+def face_dual_uv(p):
+    a = p[0, 1] * (p[1, 2] - p[2, 2]) + p[1, 1] * (p[2, 2] - p[0, 2]) + p[2, 1] * (p[0, 2] - p[1, 2])
+    b = p[0, 2] * (p[1, 0] - p[2, 0]) + p[1, 2] * (p[2, 0] - p[0, 0]) + p[2, 2] * (p[0, 0] - p[1, 0])
+    c = p[0, 0] * (p[1, 1] - p[2, 1]) + p[1, 0] * (p[2, 1] - p[0, 1]) + p[2, 0] * (p[0, 1] - p[1, 1])
     dp = [-a / c / 2, -b / c / 2]
     return dp
 
@@ -53,4 +53,12 @@ def power_diagram(face, uv, h=None, dh=None):
     pd['dp'] = np.zeros((face.shape[0], 2))
     pd['cell'] = [[] for i in range(pl.shape[0])]
 
+    for i in range(face.shape[0]):
+        dp = face_dual_uv(pl[face[i,:],:])
+        pd['dp'][i,:] = dp
+    pd['dp']
+
+
+
+    # TOBECONTINUE
     return pd
