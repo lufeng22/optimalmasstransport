@@ -13,7 +13,7 @@ def compute_adjacency_matrix(face):
     I = face.reshape((nf*3,1))
     facecopy = np.array([face[:,1],face[:,2], face[:,0]]).transpose()
     J = facecopy.reshape((nf*3,1))
-    V = np.array([range(0,nf),range(0,nf),range(0,nf)]).reshape((nf*3,1),order='F')
+    V = np.array([range(1,nf+1),range(1,nf+1),range(1,nf+1)]).reshape((nf*3,1),order='F')
     amd = sparse.coo_matrix((V.flatten(), (I.flatten(), J.flatten())))
     am = amd.copy().tocsr()
     am.data.fill(1)

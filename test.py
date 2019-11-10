@@ -13,6 +13,7 @@ V = mesh.points
 # compute the boundary vertices
 bd = compute_bd(F)
 
+edge, eif = compute_edge(F)
 
 
 # plot_path(F, V, bd)
