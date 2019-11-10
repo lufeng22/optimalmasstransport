@@ -5,10 +5,10 @@ Basic tools  and some demo for Optimal mass transport
 
 
 ## Package Dependency
-numpy==1.16.4
-matplotlib==3.0.3
-meshio==3.2.8  #meshio is used to load obj trimesh
-scipy==1.16.4
+numpy==1.16.4 \\
+matplotlib==3.0.3 \\
+meshio==3.2.8  #meshio is used to load obj trimesh \\
+scipy==1.16.4 \\
 
 
 
