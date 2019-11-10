@@ -8,32 +8,23 @@ from mpl_toolkits.mplot3d import axes3d, Axes3D  # <-- Note the capitalization!
 
 def plot_mesh(F=None, V=None):
     if (F is None)   and (V is None):  # show a example
-        # Make parameter spaces radii and angles.
-        n_angles = 36
-        n_radii = 8
-        min_radius = 0.25
-        radii = np.linspace(min_radius, 0.95, n_radii)
-        angles = np.linspace(0, 2 * np.pi, n_angles, endpoint=False)
-        angles = np.repeat(angles[..., np.newaxis], n_radii, axis=1)
-        angles[:, 1::2] += np.pi / n_angles
-        # Map radius, angle pairs to x, y, z points.
-        x = (radii * np.cos(angles)).flatten()
-        y = (radii * np.sin(angles)).flatten()
-        z = (np.cos(radii) * np.cos(3 * angles)).flatten()
+        u = np.linspace(0, 2.0 * np.pi, endpoint=True, num=50)
+        v = np.linspace(-0.5, 0.5, endpoint=True, num=10)
+        u, v = np.meshgrid(u, v)
+        u, v = u.flatten(), v.flatten()
+        x = (1 + 0.5 * v * np.cos(u / 2.0)) * np.cos(u)
+        y = (1 + 0.5 * v * np.cos(u / 2.0)) * np.sin(u)
+        z = 0.5 * v * np.sin(u / 2.0)
+        tri = mtri.Triangulation(u, v)
+        fig = plt.figure()
+        ax = Axes3D(fig)
+        print(tri.triangles)
+        ax.plot_trisurf(x, y, z, triangles=tri.triangles, cmap=plt.cm.Spectral)
 
-        # Create the Triangulation; no triangles so Delaunay triangulation created.
-        triang = mtri.Triangulation(x, y)
-
-        # Mask off unwanted triangles.
-        xmid = x[triang.triangles].mean(axis=1)
-        ymid = y[triang.triangles].mean(axis=1)
-        mask = xmid ** 2 + ymid ** 2 < min_radius ** 2
-        triang.set_mask(mask)
-
+    else:
 
         fig = plt.figure()
-
-        ax = Axes3D(fig)  # <-- Note the difference from your original code...
-        ax.plot_trisurf(triang, z, cmap=plt.cm.CMRmap)
+        ax = Axes3D(fig)
+        ax.plot_trisurf(V[:,0], V[:,1], V[:,2], triangles=F, cmap=plt.cm.Spectral)
         # Draw now
-        plt.show()
+        plt.draw()
