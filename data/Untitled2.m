@@ -13,3 +13,5 @@ in2 = isinpolygon(disk,pd.dpe);
 % nc = size(uv,1);
 % 
 % [pd2,h] = discrete_optimal_transport(disk,face,uv,sigma,area);
+
+in2'

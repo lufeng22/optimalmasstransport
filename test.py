@@ -15,6 +15,7 @@ V = mesh.points
 bd = compute_bd(F)
 # elapsed_time = time.time() - start_time
 # print('compute bd' + str(elapsed_time))
+
 #
 # start_time = time.time()
 # edge, eif = compute_edge(F)
