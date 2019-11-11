@@ -7,7 +7,7 @@ from scipy.linalg import norm
 from scipy.spatial import ConvexHull
 from calculate_face_normal import *
 from algebra import *
-
+from intersectRayPolygon import *
 
 def face_dual_uv(p):
     a = p[0, 1] * (p[1, 2] - p[2, 2]) + p[1, 1] * (p[2, 2] - p[0, 2]) + p[2, 1] * (p[0, 2] - p[1, 2])
@@ -15,6 +15,9 @@ def face_dual_uv(p):
     c = p[0, 0] * (p[1, 1] - p[2, 1]) + p[1, 0] * (p[2, 1] - p[0, 1]) + p[2, 0] * (p[0, 1] - p[1, 1])
     dp = [-a / c / 2, -b / c / 2]
     return dp
+
+
+
 
 
 def power_diagram(face, uv, h=None, dh=None):
@@ -56,9 +59,48 @@ def power_diagram(face, uv, h=None, dh=None):
     for i in range(face.shape[0]):
         dp = face_dual_uv(pl[face[i,:],:])
         pd['dp'][i,:] = dp
-    pd['dp']
 
+    K =  ConvexHull(uv).vertices
+    K = np.append(K,K[0])
+    vb = np.zeros((K.shape[0] - 1, 2))
+    mindp = np.min(pd["dp"], axis=0) - 1
+    maxdp = np.max(pd["dp"], axis=0) + 1
+    minx = mindp[0]
+    miny = mindp[1]
+    maxx = maxdp[0]
+    maxy = maxdp[1]
+    box = np.array([minx, miny, maxx, miny, maxx, maxy, minx, maxy, minx, miny]).reshape((-1,2))
 
+    for i in range(K.shape[0]- 1):
+        i1 = K[i]
+        i2 = K[i + 1]
+        vec = uv[i2,:] - uv[i1,:]
+        vec = np.array([vec[1], -vec[0]])
+        mid = (uv[i2,:] + uv[i1,:]) / 2.0
+        intersects = intersectRayPolygon(mid, vec, box)
+        vb[i,:] = intersects
 
-    # TOBECONTINUE
-    return pd
+    pd["dpe"] = np.concatenate((pd["dp"], vb), axis=0)
+
+    vvif, _, _= compute_connectivity(face)
+
+    for i in range(uv.shape[0]):
+        vri = vr[i]
+        pb = np.argwhere(K==i)
+        if pb.size > 0 :
+            pb = pb[0]
+            fr = np.zeros((len(vri) + 1,1))
+            fr[-1] = face.shape[0] + pb
+            if pb == 0:
+                fr[0] = face.shape[0] + K.shape[0]-1
+            else:
+                fr[0] = face.shape[0] + pb - 1
+            for j in range(len(vri) - 1):
+                fr[j+1] = vvif[i, vri[j]]
+        else:
+            fr = np.zeros((len(vri),1))
+            for j in range(len(vri)):
+                fr[j] = vvif[i, vri[j]]
+        pd["cell"][i] = np.flip(fr)
+
+    return pd, h

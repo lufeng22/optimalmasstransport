@@ -1,6 +1,7 @@
+clear all;
 [F,V]=read_obj('bunny.obj');
 
-% uv = disk_harmonic_map(F,V);
+
 % plot_mesh(F,uv)
 % 
 % 
@@ -10,5 +11,6 @@
 
  
 % vr=compute_vertex_ring(F,V, [], 1)
-
-pd = power_diagram(face,uv)
+%  [vvif,nvif,pvif] = compute_connectivity(F) 
+uv = disk_harmonic_map(F,V);
+pd = power_diagram(F,uv)
