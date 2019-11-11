@@ -16,6 +16,9 @@ Note: This is greatly inspired by "https://github.com/cfwen/geometry-processing-
 - The only reason we do this is because Python seems more accessible
 - If you are more familary with matlab, use the original one
 
+## Tutorial
 
+
+### Power Diagram
 ![Power Diagram Demo](screenshot/Figure2.png?raw=true "Power Diagram")
 
