@@ -21,20 +21,24 @@ def lineRayIntersectionPoint(rayOrigin, rayDirection, point1, point2):
     t1 = np.cross(v2, v1) / np.dot(v2, v3)
     t2 = np.dot(v1, v3) / np.dot(v2, v3)
     if t1 >= 0.0 and t2 >= 0.0 and t2 <= 1.0:
-        return rayOrigin + t1 * rayDirection
+        return rayOrigin + t1 * rayDirection, t2
     return None
 
 
 def intersectRayPolygon(origin, direction, polygon):
 
     nseg = polygon.shape[0] -1
+    intersects = list()
+    t2s = list()
     for i in range(nseg):
         p0 = polygon[i, :]
         p1 = polygon[i+1, :]
-        intersect = lineRayIntersectionPoint(origin, direction, p0, p1)
+        intersect, t2 = lineRayIntersectionPoint(origin, direction, p0, p1)
 
         if intersect is None:
             continue
         else:
-            return intersect
-    
+            intersects.append(intersect)
+            t2s.append(t2)
+
+    a.index(min(a))

@@ -13,7 +13,7 @@ dbstop if error
  
 vr=compute_vertex_ring(F,V, [], 1);
 %  [vvif,nvif,pvif] = compute_connectivity(F) 
- uv = disk_harmonic_map(F,V);
+% uv = disk_harmonic_map(F,V);
  pd = power_diagram(F,uv);
 % 
 % 

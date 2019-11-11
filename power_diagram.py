@@ -33,7 +33,21 @@ def power_diagram(face, uv, h=None, dh=None):
     while True:
         h = h - c * dh
         pl = np.concatenate((uv, np.reshape(np.square(norm(uv, axis=1)), (-1, 1)) - h), axis=1)
-        face = ConvexHull(pl).simplices
+        hull = ConvexHull(pl, qhull_options='Qt')
+        face = hull.simplices
+        # fix ups for the convex hull, as the orientation may inverse
+        fn_from_hull = hull.equations[:,2]
+        fn = calculate_face_normal(face, pl)
+        for i in range(face.shape[0]):
+            if fn[i,2] * fn_from_hull[i] < 0 :  # orientation difff
+                face[i,:] = face[i,[0, 2, 1]]
+
+
+
+        for i in range(face.shape[0]):
+            mif = np.argmin(face[i,:])
+            face[i, :] = face[i, np.mod(np.arange(mif,mif+3),3)]
+        face = face[np.argsort(face[:, 0] * np.max(face) + face[:, 1]), :]
         fn = calculate_face_normal(face, pl)
         ind = fn[:, 2] < 0
 
@@ -60,7 +74,9 @@ def power_diagram(face, uv, h=None, dh=None):
         dp = face_dual_uv(pl[face[i,:],:])
         pd['dp'][i,:] = dp
 
-    K =  ConvexHull(uv).vertices
+    K =  ConvexHull(uv, qhull_options='Qt').vertices
+    ks = np.argmin(K)
+    K = np.concatenate((K[ks::],  K[0:ks]), axis=0)
     K = np.append(K,K[0])
     vb = np.zeros((K.shape[0] - 1, 2))
     mindp = np.min(pd["dp"], axis=0) - 1
@@ -88,17 +104,17 @@ def power_diagram(face, uv, h=None, dh=None):
         vri = vr[i]
         pb = np.argwhere(K==i)
         if pb.size > 0 :
-            pb = pb[0]
-            fr = np.zeros((len(vri) + 1,1))
-            fr[-1] = face.shape[0] + pb
+            pb = pb[0][0]
+            fr = np.zeros((len(vri) + 1,)).astype(int)
+            fr[-1] = face.shape[0] + pb -1
             if pb == 0:
-                fr[0] = face.shape[0] + K.shape[0]-1
+                fr[0] = face.shape[0] + K.shape[0]-2
             else:
-                fr[0] = face.shape[0] + pb - 1
+                fr[0] = face.shape[0] + pb - 2
             for j in range(len(vri) - 1):
                 fr[j+1] = vvif[i, vri[j]]
         else:
-            fr = np.zeros((len(vri),1))
+            fr = np.zeros((len(vri),)).astype(int)
             for j in range(len(vri)):
                 fr[j] = vvif[i, vri[j]]
         pd["cell"][i] = np.flip(fr)
