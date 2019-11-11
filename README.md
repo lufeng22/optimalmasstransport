@@ -17,5 +17,5 @@ Note: This is greatly inspired by "https://github.com/cfwen/geometry-processing-
 - If you are more familary with matlab, use the original one
 
 
-
+![Power Diagram Demo](screenshot/Figure2.png?raw=true "Power Diagram")
 
