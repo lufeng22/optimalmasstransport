@@ -93,8 +93,8 @@ def power_diagram(face, uv, h=None, dh=None):
         vec = uv[i2,:] - uv[i1,:]
         vec = np.array([vec[1], -vec[0]])
         mid = (uv[i2,:] + uv[i1,:]) / 2.0
-        intersects = intersectRayPolygon(mid, vec, box)
-        vb[i,:] = intersects
+        intersect = intersectRayPolygon(mid, vec, box)
+        vb[i,:] = intersect
 
     pd["dpe"] = np.concatenate((pd["dp"], vb), axis=0)
 
@@ -106,11 +106,11 @@ def power_diagram(face, uv, h=None, dh=None):
         if pb.size > 0 :
             pb = pb[0][0]
             fr = np.zeros((len(vri) + 1,)).astype(int)
-            fr[-1] = face.shape[0] + pb -1
+            fr[-1] = face.shape[0] + pb
             if pb == 0:
                 fr[0] = face.shape[0] + K.shape[0]-2
             else:
-                fr[0] = face.shape[0] + pb - 2
+                fr[0] = face.shape[0] + pb - 1
             for j in range(len(vri) - 1):
                 fr[j+1] = vvif[i, vri[j]]
         else:

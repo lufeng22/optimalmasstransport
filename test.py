@@ -12,7 +12,7 @@ V = mesh.points
 #
 # start_time = time.time()
 # # compute the boundary vertices
-# bd = compute_bd(F)
+bd = compute_bd(F)
 # elapsed_time = time.time() - start_time
 # print('compute bd' + str(elapsed_time))
 #
@@ -49,9 +49,22 @@ vr = compute_vertex_ring(F, V, ordered=True)
 
 
 uv = disk_harmonic_map(F, V)
-with np.printoptions(precision=4, suppress=True, floatmode ='fixed'):
-    print(uv)
 
 pd, h = power_diagram(F, uv)
 
-plot_power_diagram(pd)
+# plot_power_diagram(pd)
+
+
+
+from matplotlib import path
+import numpy as np
+
+
+def isinpolygon(polygon, xy):
+    p = path.Path(polygon)
+    flag = p.contains_points(xy)
+    return flag
+
+
+flag = isinpolygon(uv[bd,:], pd["dpe"])
+print(flag)

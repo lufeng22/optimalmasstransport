@@ -2,20 +2,14 @@ clear all;
 dbstop if error
 [F,V]=read_obj('bunny.obj');
 
+bd = compute_bd(F);
+uv = disk_harmonic_map(F,V);
+disk = uv(bd, :);
+pd = power_diagram(F,uv);
 
-% plot_mesh(F,uv)
-% 
-% 
 
+in2 = isinpolygon(disk,pd.dpe);
 % 
-% plot_power_diagram(pd)
-
- 
-vr=compute_vertex_ring(F,V, [], 1);
-%  [vvif,nvif,pvif] = compute_connectivity(F) 
- uv = disk_harmonic_map(F,V);
- pd = power_diagram(F,uv);
+% nc = size(uv,1);
 % 
-% 
-plot_power_diagram(pd)
-%  
+% [pd2,h] = discrete_optimal_transport(disk,face,uv,sigma,area);

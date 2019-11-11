@@ -31,6 +31,11 @@ def plot_power_diagram(pd):
 
     fig = plt.figure()
     plt.plot(disk[:, 0], disk[:, 1], 'r-')
+    plt.plot(pd["uv"][:,0], pd["uv"][:,1],'g.')
+
+
+
+
     for i in range(len(pd["cell"])):
         pi = pd["dpe"][pd["cell"][i].flatten(),:]
         plt.plot(pi[:, 0], pi[:, 1], 'b-', linewidth = 1.5)
