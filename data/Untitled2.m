@@ -1,6 +1,6 @@
 clear all;
 dbstop if error
-[F,V]=read_obj('bunny.obj');
+[F,V]=read_obj('bunnyh.obj');
 
 bd = compute_bd(F);
 uv = disk_harmonic_map(F,V);

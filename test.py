@@ -10,7 +10,7 @@ from plot_power_diagram import *
 from discrete_optimal_transport import *
 
 
-mesh = meshio.read('data/bunny.obj')
+mesh = meshio.read('data/bunnyh.obj')
 F = mesh.cells['triangle']
 V = mesh.points
 #

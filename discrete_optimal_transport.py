@@ -26,22 +26,33 @@ def polyarea(xy):
     # Return absolute value
     return abs(area / 2.0)
 
+#
+# def polybool(cp, ci):
+#     flag = isinpolygon(ci, cp)
+#     kpt = argwhere(flag).flatten().astype(int)
+#     for i in range(ci.shape[0]):
+#         len = sqrt(ci[i, 0] * ci[i, 0] + ci[i, 1] * ci[i, 1])
+#         if len > 0.9:
+#             ci[i,:] = intersectRayPolygon(array([0.0, 0.0]), ci[i,:], concatenate((cp, cp[0].reshape(1,2))))
+#
+#
+#     newpt = concatenate((cp[kpt,:], ci), axis=0)
+#     if (newpt.shape[0] <4):
+#         return newpt
+#
+#     K = ConvexHull(newpt, qhull_options='Qt').vertices
+#     K = append(K,K[0])
+#     return newpt[K,:]
 
 def polybool(cp, ci):
     flag = isinpolygon(ci, cp)
     kpt = argwhere(flag).flatten().astype(int)
     for i in range(ci.shape[0]):
         len = sqrt(ci[i, 0] * ci[i, 0] + ci[i, 1] * ci[i, 1])
-        if len > 0.9:
-            ci[i,:] = intersectRayPolygon(array([0.0, 0.0]), ci[i,:], concatenate((cp, cp[0].reshape(1,2))))
+        if len > 0.99:
+            ci[i,:] = ci[i,:]/len
 
-
-    newpt = concatenate((cp[kpt,:], ci), axis=0)
-    K = ConvexHull(newpt, qhull_options='Qt').vertices
-    K = append(K,K[0])
-    return newpt[K,:]
-
-
+    return ci
 
 
 
