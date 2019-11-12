@@ -2,10 +2,14 @@ import meshio
 from algebra import  *
 from parameterization import *
 from graphics import *
-
+from matplotlib import path
+import numpy as np
 import time
 from power_diagram import power_diagram
 from plot_power_diagram import *
+from discrete_optimal_transport import *
+
+
 mesh = meshio.read('data/bunny.obj')
 F = mesh.cells['triangle']
 V = mesh.points
@@ -54,18 +58,12 @@ uv = disk_harmonic_map(F, V)
 pd, h = power_diagram(F, uv)
 
 # plot_power_diagram(pd)
+disk = uv[bd, :];
 
+def sigma(x):
+    x = x.reshape((-1,2))
+    return  np.ones((x.shape[0],))
 
-
-from matplotlib import path
-import numpy as np
-
-
-def isinpolygon(polygon, xy):
-    p = path.Path(polygon)
-    flag = p.contains_points(xy)
-    return flag
-
-
-flag = isinpolygon(uv[bd,:], pd["dpe"])
-print(flag)
+nc = uv.shape[0]
+area = 4/nc* np.ones( (nc,))
+pd2,h = discrete_optimal_transport(disk,F,uv,sigma,area);

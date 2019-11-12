@@ -42,6 +42,7 @@ def intersectRayPolygon(origin, direction, polygon):
 
 
 
+
 #
 # def intersectRayPolygon(origin, direction, polygon):
 #
