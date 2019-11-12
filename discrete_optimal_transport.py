@@ -119,7 +119,7 @@ def calculate_hessian(cp,pd,sigma):
 
     I2 = zeros( (ne, )).astype(int)
     J2 = zeros( (ne, )).astype(int)
-    V2 = zeros( (ne, )).astype(int)
+    V2 = zeros( (ne, ))
     isin = isinpolygon(cp, pd["dpe"])
 
     p = sigma(pd["dpe"])
@@ -179,6 +179,7 @@ def discrete_optimal_transport(cp, face, uv, sigma, delta, h = None, max_iter =5
 
         H[0,0] = H[0,0] +1
         dh = spsolve(H, D)
+        dh = dh.reshape((-1,1))
         if not all(isfinite(dh)):
             raise ValueError("""ERROR: |dh| goes infinite, most probably due to convexhull 
                    failing, which is due to some cell(s) disappear. Real reason 
