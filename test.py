@@ -66,4 +66,4 @@ def sigma(x):
 
 nc = uv.shape[0]
 area = 4/nc* np.ones( (nc,))
-pd2,h = discrete_optimal_transport(disk,F,uv,sigma,area);
+pd2,h, maxdh= discrete_optimal_transport(disk,F,uv,sigma,area);

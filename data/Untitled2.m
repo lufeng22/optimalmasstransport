@@ -17,4 +17,5 @@ area = 4/nc*ones(nc,1);
 sigma = @(xy) 1; 
 [pd2,h] = discrete_optimal_transport(disk,F,uv,sigma,area);
 
-in2'
+uv_new = compute_centroid(disk,pd2);
+ 

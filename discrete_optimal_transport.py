@@ -111,11 +111,11 @@ def calculate_hessian(cp,pd,sigma):
             J[k] = ci[j + 1]
             V[k] = i
             k = k + 1
-    C = sparse.coo_matrix((V.flatten(), (I.flatten(), J.flatten())))
+    C = sparse.coo_matrix((V.flatten()+1, (I.flatten(), J.flatten())))
     C = C.tolil()
     IJ =argwhere(C)
-    I = IJ[:, 1]
-    J = IJ[:, 0]
+    I = IJ[:, 0]
+    J = IJ[:, 1]
 
     I2 = zeros( (ne, )).astype(int)
     J2 = zeros( (ne, )).astype(int)
@@ -128,8 +128,8 @@ def calculate_hessian(cp,pd,sigma):
 
     k = 0
     for i in range(I.shape[0]):
-        I2[k] = C[I[i], J[i]]
-        J2[k] = C[J[i], I[i]]
+        I2[k] = C[J[i], I[i]]-1
+        J2[k] = C[I[i], J[i]]-1
         # compute         edge        length in convex        polygon
         p1 = pd["dpe"][I[i],:]
         p2 = pd["dpe"][J[i],:]
@@ -139,9 +139,20 @@ def calculate_hessian(cp,pd,sigma):
             lij = norm(p1 - p2) * (p[I[i]] + p[J[i]]) / 2.0
         if sum(in2) == 1:
 
-            pi = intersectRayPolygon(p1, p2 - p1, cp)
-            if pi is None:
-                pi = intersectRayPolygon(p2, p1 - p2, cp)
+            pi1 = intersectRayPolygon(p1, p2 - p1, cp)
+            pi2 = intersectRayPolygon(p2, p1 - p2, cp)
+
+            if pi1 is None:
+                pi = pi2
+            else:
+                if pi2 is None:
+                    pi = pi1
+                else:
+                    if norm( (p1+p2)/2.0 - pi1) <   norm( (p1+p2)/2.0 - pi2):
+                        pi =pi1
+                    else:
+                        pi = pi2
+
             if in2[0]:
                 lij = norm(pi - p1) * (sigma(pi) + p[I[i]] ) / 2.0
             else:
@@ -164,7 +175,7 @@ def calculate_hessian(cp,pd,sigma):
 
 
 
-def discrete_optimal_transport(cp, face, uv, sigma, delta, h = None, max_iter =50, eps = 1e-6 ):
+def discrete_optimal_transport(cp, face, uv, sigma, delta, h = None, max_iter =100, eps = 1e-6 ):
     npuv = uv.shape[0]
     if h is None:
         h = zeros((npuv,1))
@@ -177,7 +188,7 @@ def discrete_optimal_transport(cp, face, uv, sigma, delta, h = None, max_iter =5
         D = G - delta
         H = calculate_hessian(cp, pd, sigma)
 
-        H[0,0] = H[0,0] +1
+        H[0,0] = H[0,0] +1.0
         dh = spsolve(H, D)
         dh = dh.reshape((-1,1))
         if not all(isfinite(dh)):
@@ -185,13 +196,16 @@ def discrete_optimal_transport(cp, face, uv, sigma, delta, h = None, max_iter =5
                    failing, which is due to some cell(s) disappear. Real reason 
                    is mesh quality/measure is too bad""")
         dh = dh - mean(dh)
-        dh = dh - mean(dh);
+        dh = dh - mean(dh)
 
         maxdh = max(abs(dh));
-        print('#%02d: max|dh| = %.10f\n' %( k, maxdh))
+        print('#%02d: max|dh| = %.10f' %( k, maxdh))
 
         if maxdh < eps:
             break
 
         pd, h = power_diagram(face, uv, h, dh)
         k = k + 1
+
+
+    return pd, h, maxdh

@@ -14,7 +14,7 @@ Basic tools  and some demo for Optimal mass transport
 
 Note: This is greatly inspired by "https://github.com/cfwen/geometry-processing-package".
 - The only reason we do this is because Python seems more accessible
-- If you are more familary with matlab, use the original one
+- If you are more familiar with matlab, use the original one
 
 ## Tutorial
 
