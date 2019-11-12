@@ -1,5 +1,5 @@
-import meshio
-from algebra import  *
+from meshio import *
+from algebra import *
 from parameterization import *
 from graphics import *
 from matplotlib import path
@@ -9,10 +9,8 @@ from power_diagram import power_diagram
 from plot_power_diagram import *
 from discrete_optimal_transport import *
 
+F, V = read_obj('data/bunny.obj')
 
-mesh = meshio.read('data/bunnyh.obj')
-F = mesh.cells['triangle']
-V = mesh.points
 #
 # start_time = time.time()
 # # compute the boundary vertices
@@ -60,10 +58,12 @@ pd, h = power_diagram(F, uv)
 # plot_power_diagram(pd)
 disk = uv[bd, :];
 
+
 def sigma(x):
-    x = x.reshape((-1,2))
-    return  np.ones((x.shape[0],))
+    x = x.reshape((-1, 2))
+    return np.ones((x.shape[0],))
+
 
 nc = uv.shape[0]
-area = 4/nc* np.ones( (nc,))
-pd2,h, maxdh= discrete_optimal_transport(disk,F,uv,sigma,area);
+area = 4 / nc * np.ones((nc,))
+pd2, h, maxdh = discrete_optimal_transport(disk, F, uv, sigma, area);
